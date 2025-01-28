@@ -1,7 +1,18 @@
 import { BookModel } from "./book.model";
 import { TBook } from "./book.interface";
+import { JwtPayload } from "jsonwebtoken";
+import { sendImageToCloudinary } from "../../app/utils/sendImageToCloudinary";
 
-const createBookIntoDB = async (book: TBook) => {
+const createBookIntoDB = async (file: any, book: TBook, user: JwtPayload) => {
+  if (file) {
+    const imageName = `${user.userId}${book.title}`;
+    const path = file?.path;
+
+    //send image to cloudinary
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
+    book.image = secure_url as string;
+  }
+
   const result = await BookModel.create(book); // static method create
 
   return result;

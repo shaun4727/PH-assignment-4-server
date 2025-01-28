@@ -16,6 +16,18 @@ const createCarousel = catchAsync(async (req, res) => {
   });
 });
 
+const getCarousel = catchAsync(async (req, res) => {
+  const result = await CarouselServices.getAllCarouselFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Files retrieved succesfully",
+    data: result,
+  });
+});
+
 export const CarouselController = {
   createCarousel,
+  getCarousel,
 };

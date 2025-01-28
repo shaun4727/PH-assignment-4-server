@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { BookControllers } from "./book.controller";
 
 import validateMiddleware from "../../app/middleware/validateRequest";
@@ -6,12 +6,22 @@ import validateMiddleware from "../../app/middleware/validateRequest";
 import auth from "../../app/middleware/auth";
 import { USER_ROLE } from "../user-auth/user_auth.constant";
 import { bookValidation } from "./book.zod.validation";
+import { upload } from "../../app/utils/sendImageToCloudinary";
+import { makeFolder } from "../../app/utils/makeDir";
+// import { makeFolder } from "../../app/utils/makeDir";
 
 const router = express.Router();
 
 router.post(
   "/",
+  makeFolder,
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   auth(USER_ROLE.admin),
+
   validateMiddleware(bookValidation.createBookValidationSchema),
   BookControllers.createBook
 );

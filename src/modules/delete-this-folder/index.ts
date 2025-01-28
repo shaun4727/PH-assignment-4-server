@@ -74,6 +74,8 @@ function generateRandomBooks(count: number) {
     const author = getRandomElement(authors);
     const price = parseFloat((Math.random() * 100 + 10).toFixed(2));
     const category = getRandomElement(categories);
+    const image =
+      "https://res.cloudinary.com/dtsznew49/image/upload/v1738088011/6795b1caaa2a048d4d4ea984The%20Great%20Gatsby.webp";
     const description = getRandomElement(descriptions);
     const quantity = Math.floor(Math.random() * 100 + 1);
     const inStock = quantity > 0;
@@ -87,6 +89,7 @@ function generateRandomBooks(count: number) {
       category,
       description,
       quantity,
+      image,
       inStock,
       createdAt,
       updatedAt,

@@ -16,4 +16,6 @@ router.post(
   CarouselController.createCarousel
 );
 
+router.get("/get-carousel", CarouselController.getCarousel);
+
 export const CarouselRoutes = router;

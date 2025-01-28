@@ -3,7 +3,11 @@ import catchAsync from "../../app/utils/catchAsync";
 import sendResponse from "../../app/middleware/sendResponse";
 
 const createBook = catchAsync(async (req, res) => {
-  const result = await BookServices.createBookIntoDB(req.body);
+  const result = await BookServices.createBookIntoDB(
+    req.file,
+    req.body,
+    req.user
+  );
 
   sendResponse(res, {
     statusCode: 201,

@@ -7,7 +7,6 @@ async function bootstrap() {
     await mongoose.connect(config.database_url as string, { autoIndex: true });
 
     app.listen(config.port, () => {
-      console.log(require("crypto").randomBytes(32).toString("hex"));
       console.log(`Server is running on port ${config.port}`);
     });
   } catch (err) {
