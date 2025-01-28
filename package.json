@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "test": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc",
+    "build": "npm install && tsc",
     "lint": "npx eslint .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""
   },
