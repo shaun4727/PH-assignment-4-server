@@ -18,8 +18,16 @@ const createBook = catchAsync(async (req, res) => {
 });
 
 const getBooks = catchAsync(async (req, res) => {
-  const result = await BookServices.getAllBookFromDB();
-
+  const result = await BookServices.getAllBookFromDB(req.query);
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Books retrieved successfully",
+    data: result,
+  });
+});
+const getTabBooks = catchAsync(async (req, res) => {
+  const result = await BookServices.getAllTabBookFromDB();
   sendResponse(res, {
     statusCode: 200,
     success: true,
@@ -69,4 +77,5 @@ export const BookControllers = {
   getSingleBook,
   updateSingleBook,
   deleteSingleBook,
+  getTabBooks,
 };

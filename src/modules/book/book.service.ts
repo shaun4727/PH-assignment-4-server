@@ -2,6 +2,8 @@ import { BookModel } from "./book.model";
 import { TBook } from "./book.interface";
 import { JwtPayload } from "jsonwebtoken";
 import { sendImageToCloudinary } from "../../app/utils/sendImageToCloudinary";
+import QueryBuilder from "../../app/builder/QueryBuilder";
+import { bookSearchableFields } from "./book.constant";
 
 const createBookIntoDB = async (file: any, book: TBook, user: JwtPayload) => {
   if (file) {
@@ -18,7 +20,22 @@ const createBookIntoDB = async (file: any, book: TBook, user: JwtPayload) => {
   return result;
 };
 
-const getAllBookFromDB = async () => {
+const getAllBookFromDB = async (query: Record<string, unknown>) => {
+  const baseQuery = BookModel.find({ inStock: true });
+  const bookQuery = new QueryBuilder(baseQuery, query)
+    .search(bookSearchableFields)
+    .sort()
+    .filter()
+    .paginate();
+  const data = await bookQuery.modelQuery.limit(9).exec(); // Execute query and fetch data
+  const countQuery = new QueryBuilder(BookModel.find({ inStock: true }), query)
+    .search(bookSearchableFields)
+    .sort()
+    .filter();
+  const count = await countQuery.modelQuery.countDocuments();
+  return { data, count };
+};
+const getAllTabBookFromDB = async () => {
   const result = await BookModel.find({ inStock: true });
   return result;
 };
@@ -46,4 +63,5 @@ export const BookServices = {
   getOneBookFromDB,
   updateOneBookFromDB,
   deleteOneBook,
+  getAllTabBookFromDB,
 };

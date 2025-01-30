@@ -1,21 +1,46 @@
 import { Schema, model } from "mongoose";
-import { Order } from "./order.interface";
+import { TOrder } from "./order.interface";
 
-const orderSchema = new Schema<Order>(
+const orderSchema = new Schema<TOrder>(
   {
-    product: {
-      type: Schema.Types.ObjectId,
-      ref: "Book",
-      required: [true, "Product is required"],
-    },
+    products: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Book",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          min: [1, "Quantity must be at least 1"],
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "User is required"],
+      required: true,
     },
-    quantity: { type: Number, required: [true, "Quantity is required"] },
-    totalPrice: { type: Number, required: [true, "Total Price  is required"] },
-    cancelled: { type: Boolean, default: false },
+    totalPrice: { type: Number, required: true },
+    status: {
+      type: String,
+      enum: ["Pending", "Paid", "Shipped", "Completed", "Cancelled"],
+      default: "Pending",
+    },
+    transaction: {
+      id: String,
+      transactionStatus: String,
+      bank_status: String,
+      sp_code: String,
+      sp_message: String,
+      method: String,
+      date_time: String,
+    },
   },
   {
     timestamps: true,
@@ -24,9 +49,16 @@ const orderSchema = new Schema<Order>(
 );
 
 orderSchema.post("save", async function (doc, next) {
-  await doc.populate("product");
-  await doc.populate("user", "-password -role -isBlocked");
+  await doc.populate({
+    path: "products.product", // Populate each product reference inside the products array
+    model: "Book",
+  });
+
+  await doc.populate({
+    path: "user",
+    select: "-password -role -isBlocked",
+  });
   next();
 });
 
-export const OrderModel = model<Order>("Order", orderSchema);
+export const OrderModel = model<TOrder>("Order", orderSchema);

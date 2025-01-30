@@ -12,9 +12,20 @@ const router = express.Router();
 router.post(
   "/",
   auth(USER_ROLE.admin, USER_ROLE.user),
+
   validateMiddleware(orderValidation.createOrderValidationSchema),
   orderControllers.createOrder
 );
+router.get("/verify", auth(USER_ROLE.user), orderControllers.verifyPayment);
+
+router.post(
+  "/",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+
+  validateMiddleware(orderValidation.createOrderValidationSchema),
+  orderControllers.createOrder
+);
+
 router.get(
   "/revenue",
   auth(USER_ROLE.admin, USER_ROLE.user),

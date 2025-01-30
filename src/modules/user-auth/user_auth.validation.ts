@@ -11,10 +11,12 @@ const createUserValidationSchema = z.object({
         required_error: "Email is required",
       })
       .email("Invalid email format"),
-    password: z.string({
-      invalid_type_error: "Password must be string",
-      required_error: "Password is required",
-    }),
+    password: z
+      .string({
+        invalid_type_error: "Password must be string",
+        required_error: "Password is required",
+      })
+      .min(8, "Password must be at least 8 characters long"),
   }),
 });
 

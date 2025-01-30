@@ -26,6 +26,7 @@ router.post(
   BookControllers.createBook
 );
 router.get("/", BookControllers.getBooks);
+router.get("/tab-books", BookControllers.getTabBooks);
 router.get("/:productId", BookControllers.getSingleBook);
 router.put(
   "/:productId",

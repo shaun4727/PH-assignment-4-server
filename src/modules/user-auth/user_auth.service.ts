@@ -33,6 +33,7 @@ const loginUser = async (payload: TLoginUser) => {
     userEmail: user.email,
     role: user.role,
     userId: user._id,
+    name: user.name,
   };
 
   const accessToken = createToken(
@@ -85,6 +86,7 @@ const refreshToken = async (token: string) => {
     userEmail: user.email,
     role: user.role,
     userId: user._id,
+    name: user.name,
   };
 
   const accessToken = createToken(
