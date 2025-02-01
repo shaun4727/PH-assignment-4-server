@@ -12,6 +12,17 @@ const createOrder = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
+const getOrders = catchAsync(async (req, res) => {
+  const result = await OrderServices.getOrderFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Order retrieved successfully",
+    data: result,
+  });
+});
 const verifyPayment = catchAsync(async (req, res) => {
   const result = await OrderServices.verifyPayment(
     req.query.order_id as string
@@ -42,4 +53,5 @@ export const orderControllers = {
   createOrder,
   totalRevenues,
   verifyPayment,
+  getOrders,
 };

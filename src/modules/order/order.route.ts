@@ -25,6 +25,12 @@ router.post(
   validateMiddleware(orderValidation.createOrderValidationSchema),
   orderControllers.createOrder
 );
+router.get(
+  "/",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+
+  orderControllers.getOrders
+);
 
 router.get(
   "/revenue",

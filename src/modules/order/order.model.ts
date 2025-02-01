@@ -58,6 +58,7 @@ orderSchema.post("save", async function (doc, next) {
     path: "user",
     select: "-password -role -isBlocked",
   });
+
   next();
 });
 

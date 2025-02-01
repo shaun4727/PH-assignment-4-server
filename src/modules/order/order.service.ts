@@ -5,6 +5,11 @@ import { BookModel } from "../book/book.model";
 import mongoose from "mongoose";
 import { orderUtils } from "./order.utils";
 
+const getOrderFromDB = async () => {
+  const orders = OrderModel.find().populate([{ path: "products.product" }]);
+
+  return orders;
+};
 const orderBookFromDB = async (order: TOrder, client_ip: string) => {
   const session = await mongoose.startSession();
   console.log(client_ip);
@@ -22,6 +27,12 @@ const orderBookFromDB = async (order: TOrder, client_ip: string) => {
             { session }
           );
         }
+        const prodCount = Number(item.stock) - Number(item.quantity);
+        await BookModel.updateOne(
+          { _id: item.product },
+          { $set: { quantity: prodCount } },
+          { session }
+        );
       })
     );
 
@@ -120,4 +131,5 @@ export const OrderServices = {
   orderBookFromDB,
   totalRevenue,
   verifyPayment,
+  getOrderFromDB,
 };
