@@ -1,18 +1,52 @@
 import { OrderModel } from "./order.model";
 import { TOrder } from "./order.interface";
 import { BookModel } from "../book/book.model";
+import { JwtPayload } from "jsonwebtoken";
 // import AppError from "../../app/utils/AppError";
 import mongoose from "mongoose";
 import { orderUtils } from "./order.utils";
+import { USER_ROLE } from "../user-auth/user_auth.constant";
+import AppError from "../../app/utils/AppError";
 
-const getOrderFromDB = async () => {
-  const orders = OrderModel.find().populate([{ path: "products.product" }]);
+const getOrderFromDB = async (user: JwtPayload) => {
+  if (user.role === USER_ROLE.user) {
+    return OrderModel.find({
+      user: user.userId,
+      status: { $ne: "Blocked" },
+    }).populate([{ path: "products.product" }]);
+  }
 
-  return orders;
+  return OrderModel.find({ status: { $ne: "Blocked" } }).populate([
+    { path: "products.product" },
+    { path: "user" },
+  ]);
+};
+
+const deleteOrderFromDB = async (id: string) => {
+  const result = await OrderModel.findOneAndUpdate(
+    { _id: id },
+    { status: "Blocked" },
+    { new: true }
+  );
+
+  if (!result) {
+    throw new AppError(400, "Failed to delete Order!");
+  }
+};
+const updateOrderInDB = async (status: string, id: string) => {
+  const result = await OrderModel.findOneAndUpdate(
+    { _id: id },
+    { status: status },
+    { new: true }
+  );
+
+  if (!result) {
+    throw new AppError(400, "Failed to delete Order!");
+  }
 };
 const orderBookFromDB = async (order: TOrder, client_ip: string) => {
   const session = await mongoose.startSession();
-  console.log(client_ip);
+
   try {
     session.startTransaction();
     const orderDoc = new OrderModel({ ...order });
@@ -132,4 +166,6 @@ export const OrderServices = {
   totalRevenue,
   verifyPayment,
   getOrderFromDB,
+  deleteOrderFromDB,
+  updateOrderInDB,
 };

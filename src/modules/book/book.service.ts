@@ -27,7 +27,14 @@ const getAllBookFromDB = async (query: Record<string, unknown>) => {
     .sort()
     .filter()
     .paginate();
-  const data = await bookQuery.modelQuery.limit(9).exec(); // Execute query and fetch data
+  let data = [];
+  if (query.dashboard) {
+    data = await bookQuery.modelQuery;
+  } else {
+    data = await bookQuery.modelQuery.limit(9).exec();
+  }
+
+  // Execute query and fetch data
   const countQuery = new QueryBuilder(BookModel.find({ inStock: true }), query)
     .search(bookSearchableFields)
     .sort()

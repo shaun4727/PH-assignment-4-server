@@ -38,4 +38,7 @@ router.get(
   orderControllers.totalRevenues
 );
 
+router.delete("/:id", auth(USER_ROLE.admin), orderControllers.deleteOrder);
+router.patch("/", auth(USER_ROLE.admin), orderControllers.updateOrder);
+
 export const OrderRoutes = router;

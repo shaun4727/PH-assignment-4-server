@@ -9,7 +9,13 @@ export type TOrder = {
   }[];
   user: Types.ObjectId;
   totalPrice: number;
-  status: "Pending" | "Paid" | "Shipped" | "Completed" | "Cancelled";
+  status:
+    | "Pending"
+    | "Paid"
+    | "Shipped"
+    | "Completed"
+    | "Cancelled"
+    | "Blocked";
   transaction?: {
     id?: string;
     transactionStatus?: string;
