@@ -13,7 +13,7 @@ const getOrderFromDB = async (user: JwtPayload) => {
     return OrderModel.find({
       user: user.userId,
       status: { $ne: "Blocked" },
-    }).populate([{ path: "products.product" }]);
+    }).populate([{ path: "products.product" }, { path: "user" }]);
   }
 
   return OrderModel.find({ status: { $ne: "Blocked" } }).populate([
