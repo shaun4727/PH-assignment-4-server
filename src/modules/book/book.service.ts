@@ -52,14 +52,31 @@ const getOneBookFromDB = async (id: string) => {
   return result;
 };
 
-const updateOneBookFromDB = async (id: string, data: object) => {
-  await BookModel.updateOne({ _id: id }, data);
-  const result = await BookModel.findOne({ _id: id });
+const updateOneBookFromDB = async (
+  id: string,
+  file: any,
+  book: TBook,
+  user: JwtPayload
+) => {
+  if (file) {
+    const imageName = `${user.userId}${book.title}`;
+    const path = file?.path;
+
+    //send image to cloudinary
+    const { secure_url } = await sendImageToCloudinary(imageName, path);
+    book.image = secure_url as string;
+  }
+
+  const result = await BookModel.findByIdAndUpdate(id, book, { new: true });
   return result;
 };
 
 const deleteOneBook = async (id: string) => {
-  const result = await BookModel.deleteOne({ _id: id });
+  const result = await BookModel.findOneAndUpdate(
+    { _id: id },
+    { inStock: false },
+    { new: true }
+  );
 
   return result;
 };

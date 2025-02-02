@@ -30,7 +30,14 @@ router.get("/tab-books", BookControllers.getTabBooks);
 router.get("/:productId", BookControllers.getSingleBook);
 router.put(
   "/:productId",
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.file) {
+      upload.single("file");
+    }
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  auth(USER_ROLE.admin),
   validateMiddleware(bookValidation.updateBookValidationSchema),
   BookControllers.updateSingleBook
 );

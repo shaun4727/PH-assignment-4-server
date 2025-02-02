@@ -50,7 +50,12 @@ const getSingleBook = catchAsync(async (req, res) => {
 
 const updateSingleBook = catchAsync(async (req, res) => {
   const { productId } = req.params;
-  const result = await BookServices.updateOneBookFromDB(productId, req.body);
+  const result = await BookServices.updateOneBookFromDB(
+    productId,
+    req.file,
+    req.body,
+    req.user
+  );
 
   sendResponse(res, {
     statusCode: 200,

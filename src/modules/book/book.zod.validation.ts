@@ -43,6 +43,7 @@ const updateBookValidationSchema = z.object({
         required_error: "Title is required",
       })
       .optional(),
+    image: z.string().optional(),
     author: z
       .string({
         required_error: "Author is required",
@@ -74,6 +75,7 @@ const updateBookValidationSchema = z.object({
       })
       .default(true)
       .optional(),
+    reviews: z.array(TReviewSchema).optional(),
   }),
 });
 
