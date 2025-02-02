@@ -45,8 +45,33 @@ const refreshToken = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "All users are retrieved succesfully!",
+    data: result,
+  });
+});
+
+const deactivateUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  await UserServices.updateUserStatus(userId);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Status changed succesfully!",
+  });
+});
+
 export const UserControllers = {
   createUser,
   userLogin,
   refreshToken,
+  getAllUsers,
+  deactivateUser,
 };

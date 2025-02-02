@@ -100,8 +100,25 @@ const refreshToken = async (token: string) => {
   };
 };
 
+const getUsersFromDB = async () => {
+  const allUsers = await User.find({ role: "user" }).select(
+    "-password -createdAt -updatedAt -__v"
+  );
+  return allUsers;
+};
+const updateUserStatus = async (id: string) => {
+  const user: Record<string, unknown> = (await User.findOne({ _id: id })) || {};
+
+  await User.findByIdAndUpdate(id, {
+    $set: { isBlocked: !user.isBlocked },
+  });
+  return;
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUser,
   refreshToken,
+  getUsersFromDB,
+  updateUserStatus,
 };
