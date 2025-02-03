@@ -16,7 +16,11 @@ router.post(
   validateMiddleware(orderValidation.createOrderValidationSchema),
   orderControllers.createOrder
 );
-router.get("/verify", auth(USER_ROLE.user), orderControllers.verifyPayment);
+router.get(
+  "/verify",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  orderControllers.verifyPayment
+);
 
 router.post(
   "/",
