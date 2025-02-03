@@ -1,9 +1,15 @@
 import AppError from "../../app/utils/AppError";
-import { TLoginUser, TUser, TUserWithId } from "./user_auth.interface";
+import {
+  TLoginUser,
+  TUpdatePassword,
+  TUser,
+  TUserWithId,
+} from "./user_auth.interface";
 import { User } from "./user_auth.model";
 import { createToken } from "./user_auth.utils";
 import config from "../../app/config";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 const createUserIntoDB = async (user: TUser) => {
   const result = await User.create(user);
@@ -115,10 +121,33 @@ const updateUserStatus = async (id: string) => {
   return;
 };
 
+const updatePasswordInDB = async (
+  passwordInfo: TUpdatePassword,
+  userInfo: JwtPayload
+) => {
+  const user = (await User.findOne({ _id: userInfo.userId })) as TUserWithId;
+  const isMatched = await bcrypt.compare(
+    passwordInfo.oldPassword,
+    user.password
+  );
+  if (!isMatched) {
+    throw new AppError(403, "Old password does not match!");
+  }
+  const newPassword = await bcrypt.hash(
+    passwordInfo.newPassword,
+    Number(config.bcrypt_salt)
+  );
+  await User.findByIdAndUpdate(userInfo.userId, {
+    $set: { password: newPassword },
+  });
+  return;
+};
+
 export const UserServices = {
   createUserIntoDB,
   loginUser,
   refreshToken,
   getUsersFromDB,
   updateUserStatus,
+  updatePasswordInDB,
 };

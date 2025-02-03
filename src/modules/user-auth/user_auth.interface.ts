@@ -28,6 +28,15 @@ export interface UserModel extends Model<TUser> {
   ): boolean;
 }
 
+export type TUpdatePassword = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 export type TUserRole = keyof typeof USER_ROLE;
 
-export type TUserWithId = TUser & { _id: string };
+export type TUserWithId = TUser & {
+  _id: string;
+  createdAt?: string;
+  updatedAt: string;
+};

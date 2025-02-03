@@ -17,6 +17,12 @@ router.post(
   validateMiddleware(userValidations.loginValidationSchema),
   UserControllers.userLogin
 );
+router.post(
+  "/update-password",
+  auth(USER_ROLE.user),
+  validateMiddleware(userValidations.updatePasswordValidationSchema),
+  UserControllers.updatePassword
+);
 
 router.get("/get-users", auth(USER_ROLE.admin), UserControllers.getAllUsers);
 
@@ -30,5 +36,7 @@ router.patch(
   auth(USER_ROLE.admin),
   UserControllers.deactivateUser
 );
+
+router.post("", auth(USER_ROLE.user));
 
 export const UserRoutes = router;

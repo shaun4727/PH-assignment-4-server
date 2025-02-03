@@ -32,6 +32,19 @@ const loginValidationSchema = z.object({
   }),
 });
 
+const updatePasswordValidationSchema = z.object({
+  body: z.object({
+    newPassword: z
+      .string({ required_error: "New password is required." })
+      .min(8, "Password must be at least 8 characters long"),
+    oldPassword: z
+      .string({
+        required_error: "Old password is required",
+      })
+      .min(8, "Password must be at least 8 characters long"),
+  }),
+});
+
 const refreshTokenValidationSchema = z.object({
   cookies: z.object({
     refreshToken: z.string({
@@ -44,4 +57,5 @@ export const userValidations = {
   createUserValidationSchema,
   loginValidationSchema,
   refreshTokenValidationSchema,
+  updatePasswordValidationSchema,
 };

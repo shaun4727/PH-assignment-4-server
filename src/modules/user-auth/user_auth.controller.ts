@@ -14,6 +14,16 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const updatePassword = catchAsync(async (req, res) => {
+  await UserServices.updatePasswordInDB(req.body, req.user);
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: "Password updated successfully",
+  });
+});
+
 const userLogin = catchAsync(async (req, res) => {
   const result = await UserServices.loginUser(req.body);
   const { refreshToken, accessToken } = result;
@@ -74,4 +84,5 @@ export const UserControllers = {
   refreshToken,
   getAllUsers,
   deactivateUser,
+  updatePassword,
 };

@@ -1,8 +1,10 @@
 import { JwtPayload } from "jsonwebtoken";
 import { sendImageToCloudinary } from "../../app/utils/sendImageToCloudinary";
 import { CarouselModel } from "./carousel.model";
+import AppError from "../../app/utils/AppError";
 
 const createCarouselIntoDB = async (files: any, user: JwtPayload) => {
+  console.log("files", files);
   try {
     if (files) {
       const result = await Promise.all(
@@ -18,6 +20,7 @@ const createCarouselIntoDB = async (files: any, user: JwtPayload) => {
 
       return result;
     }
+    throw new AppError(403, "Files are not found!");
   } catch (err: any) {
     throw new Error(err);
   }

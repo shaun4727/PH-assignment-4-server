@@ -11,6 +11,7 @@ router.post(
   "/create-carousel",
   auth(USER_ROLE.admin),
   makeFolder,
+
   upload.array("file"),
 
   CarouselController.createCarousel
