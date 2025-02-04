@@ -43,7 +43,17 @@ const getAllBookFromDB = async (query: Record<string, unknown>) => {
   return { data, count };
 };
 const getAllTabBookFromDB = async () => {
-  const result = await BookModel.find().limit(6);
+  const categories = ["Biography", "Education", "Mystery"];
+
+  const bookQueries = categories.map((category) =>
+    BookModel.find({ category }).limit(6)
+  );
+
+  const booksTab = await Promise.all(bookQueries);
+  let result: TBook[] = [];
+  booksTab?.forEach((item) => {
+    result = [...item, ...result];
+  });
   return result;
 };
 
