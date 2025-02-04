@@ -41,6 +41,7 @@ given below -
 4. npm install (run this command)
 5. npm run build ( run this command)
 6. npm start (to start the server locally)
+7. change the cors origin in `src/app` folder.
 
 Now, project setup is done. Hit the api described below to get the expected result.
 
