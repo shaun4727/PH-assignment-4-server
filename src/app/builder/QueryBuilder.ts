@@ -8,6 +8,7 @@ type Range = {
 export type FilterQueryType = {
   author?: string;
   category?: string;
+  inStock?: boolean;
   price?: Range;
 };
 
@@ -50,12 +51,13 @@ class QueryBuilder<T> {
       if (queryObj.category) {
         obj["category"] = queryObj.category;
       }
-      if (queryObj.price) {
-        obj["price"] = {
-          $gte: queryObj.price.$gte,
-          $lte: queryObj.price.$lte,
-        };
-      }
+
+      obj["price"] = {
+        $gte: queryObj.price.$gte,
+        $lte: queryObj.price.$lte,
+      };
+
+      obj["inStock"] = queryObj.inStock;
 
       this.modelQuery = this.modelQuery.find(obj);
     }

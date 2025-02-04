@@ -21,7 +21,7 @@ const createBookIntoDB = async (file: any, book: TBook, user: JwtPayload) => {
 };
 
 const getAllBookFromDB = async (query: Record<string, unknown>) => {
-  const baseQuery = BookModel.find({ inStock: true });
+  const baseQuery = BookModel.find();
   const bookQuery = new QueryBuilder(baseQuery, query)
     .search(bookSearchableFields)
     .sort()
@@ -35,7 +35,7 @@ const getAllBookFromDB = async (query: Record<string, unknown>) => {
   }
 
   // Execute query and fetch data
-  const countQuery = new QueryBuilder(BookModel.find({ inStock: true }), query)
+  const countQuery = new QueryBuilder(BookModel.find(), query)
     .search(bookSearchableFields)
     .sort()
     .filter();
@@ -43,7 +43,7 @@ const getAllBookFromDB = async (query: Record<string, unknown>) => {
   return { data, count };
 };
 const getAllTabBookFromDB = async () => {
-  const result = await BookModel.find({ inStock: true });
+  const result = await BookModel.find();
   return result;
 };
 
