@@ -43,7 +43,7 @@ const getAllBookFromDB = async (query: Record<string, unknown>) => {
   return { data, count };
 };
 const getAllTabBookFromDB = async () => {
-  const result = await BookModel.find();
+  const result = await BookModel.find().limit(6);
   return result;
 };
 
