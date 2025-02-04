@@ -11,6 +11,7 @@ const bookSchema = new Schema<TBook>(
     description: { type: String, required: [true, "Description is required"] },
     quantity: { type: Number, required: [true, "Quantity is required"] },
     inStock: { type: Boolean, required: [true, "Stock is required"] },
+    deleted: { type: Boolean, default: false },
     reviews: [
       {
         review: { type: String, required: [true, "Review is required"] },

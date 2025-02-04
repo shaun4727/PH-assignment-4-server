@@ -10,6 +10,7 @@ export type TBook = {
   quantity: number;
   inStock: boolean;
   reviews?: TReview[];
+  deleted?: false;
 };
 
 export type TReview = {

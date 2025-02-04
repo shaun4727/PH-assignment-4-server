@@ -79,6 +79,7 @@ function generateRandomBooks(count: number) {
     const description = getRandomElement(descriptions);
     const quantity = Math.floor(Math.random() * 100 + 1);
     const inStock = quantity > 0;
+    const deleted = false;
     const createdAt = getRandomDateWithinLastYear();
     const updatedAt = getRandomDateWithinLastYear();
 
@@ -93,6 +94,7 @@ function generateRandomBooks(count: number) {
       inStock,
       createdAt,
       updatedAt,
+      deleted,
     });
   }
 
@@ -101,11 +103,11 @@ function generateRandomBooks(count: number) {
 
 const generateBooks = catchAsync(async (req, res) => {
   const books = generateRandomBooks(100);
-  fs.writeFileSync("books.json", JSON.stringify(books, null, 2), "utf-8");
+  // fs.writeFileSync("books.json", JSON.stringify(books, null, 2), "utf-8");
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "100 random books JSON file has been generated: books.json",
+    data: books,
   });
 });
 
