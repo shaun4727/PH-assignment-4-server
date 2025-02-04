@@ -7,15 +7,28 @@ import auth from "../../app/middleware/auth";
 import { USER_ROLE } from "../user-auth/user_auth.constant";
 import { bookValidation } from "./book.zod.validation";
 import { upload } from "../../app/utils/sendImageToCloudinary";
-import { makeFolder } from "../../app/utils/makeDir";
+const fs = require("fs");
+const path = require("path");
 
 const router = express.Router();
 
 router.post(
   "/",
 
+  (req: Request, res: Response, next: NextFunction) => {
+    const folderName = "uploads";
+    // Create the full path to the folder
+    const folderPath = path.join(process.cwd(), folderName);
+
+    // Create the folder if it doesn't already exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+    }
+
+    // Proceed to the next middleware
+    next();
+  },
   upload.single("file"),
-  makeFolder,
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
     next();
@@ -30,8 +43,21 @@ router.get("/tab-books", BookControllers.getTabBooks);
 router.get("/:productId", BookControllers.getSingleBook);
 router.put(
   "/:productId",
+  (req: Request, res: Response, next: NextFunction) => {
+    const folderName = "uploads";
+    // Create the full path to the folder
+    const folderPath = path.join(process.cwd(), folderName);
+
+    // Create the folder if it doesn't already exist
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath);
+    }
+
+    // Proceed to the next middleware
+    next();
+  },
   upload.single("file"),
-  makeFolder,
+
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
     next();

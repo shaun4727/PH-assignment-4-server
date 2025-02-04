@@ -12,11 +12,7 @@ export const makeFolder = (req: Request, res: Response, next: NextFunction) => {
     // Create the folder if it doesn't already exist
     if (!fs.existsSync(folderPath)) {
       fs.mkdirSync(folderPath);
-      console.log(
-        `Folder '${folderName}' created successfully at ${folderPath}`
-      );
-    } else {
-      console.log(`Folder '${folderName}' already exists.`);
+      next();
     }
     next();
   } catch (err) {
