@@ -15,6 +15,7 @@ const globalErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
+
   let statusCode = 500;
   let message = "Something went wrong!";
   let error: TErrorSource = [

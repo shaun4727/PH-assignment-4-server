@@ -25,6 +25,7 @@ const updatePassword = catchAsync(async (req, res) => {
 });
 
 const userLogin = catchAsync(async (req, res) => {
+
   const result = await UserServices.loginUser(req.body);
   const { refreshToken, accessToken } = result;
 
@@ -36,7 +37,7 @@ const userLogin = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: 200,
-    message: "Login succesful",
+    message: "Login successful",
     data: {
       token: accessToken,
     },
